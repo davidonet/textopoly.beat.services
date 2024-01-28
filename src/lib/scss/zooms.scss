@@ -1,0 +1,146 @@
+@use 'sass:math';
+@import 'typography';
+
+/* MSG SIZE DEFAULT */
+
+@mixin small($zoom) {
+  width: math.div(480px, $zoom);
+  height: math.div(320px, $zoom);
+}
+
+@mixin long($zoom) {
+  width: math.div(960px, $zoom);
+  height: math.div(320px, $zoom);
+}
+
+@mixin tall($zoom) {
+  width: math.div(480px, $zoom);
+  height: math.div(640px, $zoom);
+}
+
+@mixin fat($zoom) {
+  width: math.div(960px, $zoom);
+  height: math.div(640px, $zoom);
+}
+
+/***********************************************************************************
+ *  DIFFERENTS ZOOM LEVELS
+ ***********************************************************************************/
+
+/* Z1 */
+
+.z1 {
+  > .s {
+    @include small(1);
+    @include lS(1);
+  }
+  > .l {
+    @include long(1);
+    @include lL(1);
+  }
+  > .t {
+    @include tall(1);
+    @include lT(1);
+  }
+  > .f {
+    @include fat(1);
+    @include lF(1);
+  }
+}
+
+/* Z2 */
+
+.z2 {
+  > .s {
+    @include small(2);
+    @include lS(2);
+  }
+  > .l {
+    @include long(2);
+    @include lL(2);
+  }
+  > .t {
+    @include tall(2);
+    @include lT(2);
+  }
+  > .f {
+    @include fat(2);
+    @include lF(2);
+  }
+}
+
+/* Z4 */
+
+.z4 {
+  > .s {
+    @include small(4);
+    @include lS(4);
+  }
+  > .l {
+    @include long(4);
+    @include lL(4);
+  }
+  > .t {
+    @include tall(4);
+    @include lT(4);
+  }
+  > .f {
+    @include fat(4);
+    @include lF(4);
+  }
+}
+
+/* Z10 */
+
+.z10 {
+  > .s {
+    @include small(10);
+    @include lS(10);
+  }
+  > .l {
+    @include long(10);
+    @include lL(10);
+  }
+  > .t {
+    @include tall(10);
+    @include lT(10);
+  }
+  > .f {
+    @include fat(10);
+    @include lF(10);
+  }
+}
+
+/* Z20 */
+
+.z20 {
+  > .s {
+    @include small(20);
+  }
+  > .l {
+    @include long(20);
+  }
+  > .t {
+    @include tall(20);
+  }
+  > .f {
+    @include fat(20);
+  }
+}
+
+/* Z40 */
+
+.z40 {
+  > .s {
+    @include small(40);
+  }
+  > .l {
+    @include long(40);
+  }
+  > .t {
+    @include tall(40);
+  }
+  > .f {
+    @include fat(40);
+  }
+}

@@ -1,0 +1,315 @@
+/* MSG TYPOGRAPHY DEFAULT */
+
+/* lS is for SMALL */
+@use 'sass:math';
+
+@mixin lS($zoom) {
+  &.l4 {
+    > p,
+    textarea {
+      margin-top: math.div(-12px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(216px, $zoom);
+      line-height: math.div(320px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: center;
+    }
+  }
+
+  &.l15 {
+    > p,
+    textarea {
+      margin-top: math.div(8px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(144px, $zoom);
+      line-height: math.div(80px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: center;
+    }
+  }
+
+  &.l50 {
+    > p,
+    textarea {
+      margin-top: math.div(-4px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(48px, $zoom);
+      line-height: math.div(80px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: left;
+    }
+  }
+  &.l150 {
+    > p,
+    textarea {
+      margin-top: math.div(0px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(36px, $zoom);
+      line-height: math.div(40px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: left;
+    }
+  }
+  &.l300 {
+    > p,
+    textarea {
+      margin-top: math.div(14px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(24px, $zoom);
+      line-height: math.div(20px, $zoom);
+      letter-spacing: math.div(4px, $zoom);
+      text-align: left;
+    }
+  }
+  &.l600 {
+    > p,
+    textarea {
+      margin-top: math.div(16px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(14px, $zoom);
+      line-height: math.div(20px, $zoom);
+      letter-spacing: math.div(2px, $zoom);
+      text-align: justify;
+    }
+  }
+}
+
+/* lL is for LONG*/
+@mixin lL($zoom) {
+  &.l4 {
+    > p,
+    textarea {
+      margin-top: math.div(-38px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(372px, $zoom);
+      line-height: math.div(320px, $zoom);
+      letter-spacing: math.div(60px, $zoom);
+      text-align: center;
+    }
+  }
+
+  &.l15 {
+    > p,
+    textarea {
+      margin-top: math.div(114px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(120px, $zoom);
+      line-height: math.div(80px, $zoom);
+      letter-spacing: math.div(-24px, $zoom);
+      text-align: center;
+    }
+  }
+
+  &.l50 {
+    > p,
+    textarea {
+      margin-top: math.div(2px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(96px, $zoom);
+      line-height: math.div(80px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: right;
+    }
+  }
+  &.l150 {
+    > p,
+    textarea {
+      margin-top: math.div(12px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(60px, $zoom);
+      line-height: math.div(40px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: center;
+    }
+  }
+  &.l300 {
+    > p,
+    textarea {
+      margin-top: math.div(0px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(36px, $zoom);
+      line-height: math.div(40px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: justify;
+    }
+  }
+  &.l600 {
+    > p,
+    textarea {
+      margin-top: math.div(34px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(24px, $zoom);
+      line-height: math.div(20px, $zoom);
+      letter-spacing: math.div(4px, $zoom);
+      text-align: justify;
+    }
+  }
+}
+
+/* lT is for TALL*/
+@mixin lT($zoom) {
+  &.l4 {
+    > p,
+    textarea {
+      margin-top: math.div(116px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(324px, $zoom);
+      line-height: math.div(320px, $zoom);
+      letter-spacing: math.div(-80px, $zoom);
+      text-align: justify;
+    }
+  }
+
+  &.l15 {
+    > p,
+    textarea {
+      margin-top: math.div(10px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(140px, $zoom);
+      line-height: math.div(200px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: justify;
+    }
+  }
+
+  &.l50 {
+    > p,
+    textarea {
+      margin-top: math.div(2px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(96px, $zoom);
+      line-height: math.div(80px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: right;
+    }
+  }
+  &.l150 {
+    > p,
+    textarea {
+      margin-top: math.div(0px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(36px, $zoom);
+      line-height: math.div(80px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: justify;
+    }
+  }
+  &.l300 {
+    > p,
+    textarea {
+      margin-top: math.div(0px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(36px, $zoom);
+      line-height: math.div(40px, $zoom);
+      letter-spacing: math.div(-2px, $zoom);
+      text-align: left;
+    }
+  }
+  &.l600 {
+    > p,
+    textarea {
+      margin-top: math.div(4px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(24px, $zoom);
+      line-height: math.div(40px, $zoom);
+      letter-spacing: math.div(-4px, $zoom);
+      text-align: justify;
+    }
+  }
+}
+
+/* lF is for FAT*/
+@mixin lF($zoom) {
+  &.l4 {
+    > p,
+    textarea {
+      margin-top: math.div(2px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(444px, $zoom);
+      line-height: math.div(640px, $zoom);
+      letter-spacing: math.div(40px, $zoom);
+      text-align: center;
+    }
+  }
+
+  &.l15 {
+    > p,
+    textarea {
+      margin-top: math.div(80px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(240px, $zoom);
+      line-height: math.div(160px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: left;
+    }
+  }
+
+  &.l50 {
+    > p,
+    textarea {
+      margin-top: math.div(0px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(108px, $zoom);
+      line-height: math.div(160px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: center;
+    }
+  }
+  &.l150 {
+    > p,
+    textarea {
+      margin-top: math.div(-8px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(72px, $zoom);
+      line-height: math.div(80px, $zoom);
+      letter-spacing: math.div(2px, $zoom);
+      text-align: left;
+    }
+  }
+  &.l300 {
+    > p,
+    textarea {
+      margin-top: math.div(36px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(50px, $zoom);
+      line-height: math.div(40px, $zoom);
+      letter-spacing: math.div(10px, $zoom);
+      text-align: center;
+    }
+  }
+  &.l600 {
+    > p,
+    textarea {
+      margin-top: math.div(0px, $zoom);
+      margin-left: math.div(20px, $zoom);
+      margin-right: math.div(20px, $zoom);
+      font-size: math.div(36px, $zoom);
+      line-height: math.div(40px, $zoom);
+      letter-spacing: math.div(0px, $zoom);
+      text-align: justify;
+    }
+  }
+}

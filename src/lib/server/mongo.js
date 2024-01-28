@@ -1,7 +1,5 @@
 import { MongoClient } from 'mongodb'
-
-const uri = 'mongodb://localhost:27017'
-const client = new MongoClient(uri)
+import { env } from '$env/dynamic/private'
 
 class DataSources {
   constructor() {
@@ -21,7 +19,7 @@ class DataSources {
       }
     } else {
       this.initialisationStarted = true
-      const client = new MongoClient(uri)
+      const client = new MongoClient(env.MONGOURI)
       await client.connect()
       this.db = client.db('textopoly')
       this._txt = this.db.collection('txt')
