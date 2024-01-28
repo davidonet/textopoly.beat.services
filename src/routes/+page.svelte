@@ -106,8 +106,7 @@
 <style>
   .msg {
     position: absolute;
-    overflow: hidden;
-    pointer-events: none;
     font-family: 'NotCourierSans';
+    overflow-wrap: break-word;
   }
 </style>
