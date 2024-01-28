@@ -8,9 +8,9 @@ class DataSources {
     this.isInitialized = false
     this.initialisationStarted = false
     this.db = null
-    this.txt = null
-    this.path = null
-    this.author = null
+    this._txt = null
+    this._path = null
+    this._author = null
   }
 
   async init() {
@@ -24,9 +24,9 @@ class DataSources {
       const client = new MongoClient(uri)
       await client.connect()
       this.db = client.db('textopoly')
-      this.txt = this.db.collection('txt')
-      this.path = this.db.collection('path')
-      this.author = this.db.collection('author')
+      this._txt = this.db.collection('txt')
+      this._path = this.db.collection('path')
+      this._author = this.db.collection('author')
       this.isInitialized = true
     }
   }
@@ -34,19 +34,19 @@ class DataSources {
   get txt() {
     return (async () => {
       await this.init()
-      return this.txt
+      return this._txt
     })()
   }
   get path() {
     return (async () => {
       await this.init()
-      return this.path
+      return this._path
     })()
   }
   get author() {
     return (async () => {
       await this.init()
-      return this.author
+      return this._author
     })()
   }
 }
