@@ -14,7 +14,7 @@
   let stepx = 0
   let stepy = 0
 
-  const zooms = [1, 2, 4, 10, 20, 40]
+  const zooms = [1, 2, 4, 10, 20]
 
   function getL(t) {
     if (t === undefined) return 'l0'
@@ -104,7 +104,7 @@
   }
 </script>
 
-<svelte:window on:mousemove={mousemove} />
+<svelte:window on:mousemove={mousemove} on:touchmove={mousemove} />
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div
@@ -126,13 +126,9 @@
           <p>&nbsp;</p>
         {/if}
       {:else if zoom < 10}
-        <img src="img/{txt.id}.avif" alt={txt.id} width="100%" height="100%" />
+        <img src="img/{txt.id}.avif" alt={txt.id} width="100%" />
       {:else}
-        <img
-          src="img/{txt.id}.avif?s=1"
-          alt={txt.id}
-          width="100%"
-          height="100%" />
+        <img src="img/{txt.id}.avif?s=1" alt={txt.id} width="100%" />
       {/if}
     </div>
   {/each}
