@@ -1,16 +1,20 @@
 <script>
   import { page } from '$app/stores'
-  import { onMount } from 'svelte'
+  import { goto } from '$app/navigation'
   import { useLazyImage as lazyImage } from 'svelte-lazy-image'
   import '$lib/scss/zooms.scss'
+  import { onMount } from 'svelte'
 
-  const params = {
-    zoom: 1,
-    stepx: 240,
-    stepy: 160,
-    xcenter: 0,
-    ycenter: 0,
-  }
+  let isDragging = false
+  let x = 0
+  let y = 0
+  let zoom = 10
+  let innerWidth = 0
+  let innerHeight = 0
+  let stepx = 0
+  let stepy = 0
+
+  const zooms = [1, 2, 4, 10, 20, 40]
 
   function getL(t) {
     if (t === undefined) return 'l0'
@@ -24,80 +28,111 @@
     return 'l600'
   }
 
-  function computeCellSize() {
-    switch (params.zoom) {
+  function getStepX(z) {
+    switch (z) {
       case 1:
-        params.stepx = 240
-        params.stepy = 160
-        break
+        return 240
       case 2:
-        params.stepx = 120
-        params.stepy = 80
-        break
+        return 120
       case 4:
-        params.stepx = 60
-        params.stepy = 40
-        break
+        return 60
       case 10:
-        params.stepx = 24
-        params.stepy = 16
-        break
+        return 24
       case 20:
-        params.stepx = 12
-        params.stepy = 8
-        break
+        return 12
       case 40:
-        params.stepx = 6
-        params.stepy = 4
-        break
+        return 6
     }
   }
 
-  function computeParams() {
-    computeCellSize()
-    params.txtwidth = Math.ceil(innerWidth / params.stepx)
-    params.txtheight = Math.ceil(innerHeight / params.stepy)
-    params.xmin = Math.ceil(params.xcenter - params.txtwidth / 2)
-    params.xmax = Math.ceil(params.xcenter + params.txtwidth / 2)
-    params.ymin = Math.ceil(params.ycenter - params.txtheight / 2)
-    params.ymax = Math.ceil(params.ycenter + params.txtheight / 2)
+  function getStepY(z) {
+    switch (z) {
+      case 1:
+        return 160
+      case 2:
+        return 80
+      case 4:
+        return 40
+      case 10:
+        return 16
+      case 20:
+        return 8
+      case 40:
+        return 4
+    }
   }
 
-  onMount(computeParams)
-
-  function getClasses(txt) {
-    return `msg ${getL(txt.t)} ${txt.s}`
+  function mousemove(e) {
+    if (isDragging) {
+      x += e.movementX / stepx
+      y += e.movementY / stepy
+    }
   }
 
-  function getStyle(txt) {
-    return `left: ${txt.p[0] * params.stepx}px; top: ${txt.p[1] * params.stepy}px; background-color: ${txt.c};`
+  function mouseup(e) {
+    isDragging = false
+    const centerX = Math.round(innerWidth / (2 * stepx) - x)
+    const centerY = Math.round(innerHeight / (2 * stepy) - y)
+    goto(`?z=${zoom}&x=${centerX}&y=${centerY}`)
   }
 
-  $: outerWidth = 0
-  $: innerWidth = 0
-  $: outerHeight = 0
-  $: innerHeight = 0
+  onMount(() => {
+    page.subscribe((p) => {
+      const centerX = parseInt(p.url.searchParams.get('x')) || 0
+      const centerY = parseInt(p.url.searchParams.get('y')) || 0
+      zoom = parseInt($page.url.searchParams.get('z')) || 10
+      innerWidth = window.innerWidth
+      innerHeight = window.innerHeight
+      stepx = getStepX(zoom)
+      stepy = getStepY(zoom)
+      x = innerWidth / (2 * stepx) - centerX
+      y = innerHeight / (2 * stepy) - centerY
+    })
+  })
+
+  function wheelZoom(e) {
+    const delta = Math.sign(e.deltaY)
+    const i = zooms.indexOf(zoom)
+    if (i === -1) return
+    const centerX = Math.round(innerWidth / (2 * stepx) - x)
+    const centerY = Math.round(innerHeight / (2 * stepy) - y)
+    if (delta > 0 && i < zooms.length - 1) {
+      goto(`?z=${zooms[i + 1]}&x=${centerX}&y=${centerY}`)
+    } else if (delta < 0 && i > 0) {
+      goto(`?z=${zooms[i - 1]}&x=${centerX}&y=${centerY}`)
+    }
+  }
 </script>
 
-<svelte:window
-  bind:innerWidth
-  bind:outerWidth
-  bind:innerHeight
-  bind:outerHeight />
+<svelte:window on:mousemove={mousemove} />
 
-<div class="z1">
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div
+  id="map"
+  class="z{zoom}"
+  on:mousedown={(e) => {
+    isDragging = true
+  }}
+  on:mouseup={mouseup}
+  on:wheel={wheelZoom}>
   {#each $page.data.txts as txt}
-    <div class={getClasses(txt)} style={getStyle(txt)}>
+    <div
+      class={`msg ${getL(txt.t)} ${txt.s}`}
+      style={`left: ${(x + txt.p[0]) * stepx}px; top: ${(y + txt.p[1]) * stepy}px; background-color: ${txt.c};`}>
       {#if txt.t}
-        <p>{txt.t}</p>
+        {#if zoom < 20}
+          <p>{txt.t}</p>
+        {:else}
+          <p>&nbsp;</p>
+        {/if}
+      {:else if zoom < 10}
+        <img src="img/{txt.id}.avif" alt={txt.id} width="100%" height="100%" />
       {:else}
         <img
           src="img/{txt.id}.avif?s=1"
           alt={txt.id}
           width="100%"
-          height="100%"
-          data-src="img/{txt.id}.avif"
-          use:lazyImage />
+          height="100%" />
       {/if}
     </div>
   {/each}
@@ -108,5 +143,16 @@
     position: absolute;
     font-family: 'NotCourierSans';
     overflow-wrap: break-word;
+    pointer-events: none;
+    z-index: -100;
+  }
+
+  #map {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 500;
+    cursor: move;
   }
 </style>

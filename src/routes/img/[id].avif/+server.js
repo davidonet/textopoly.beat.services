@@ -14,16 +14,22 @@ export async function GET({ params: { id }, url: { searchParams } }) {
   }
 
   let buf = null
-  const image = await txt.findOne({ _id: new ObjectId(id) }, { projection })
-  if (si) {
-    buf = image.si.buffer
-  } else {
-    buf = image.i.buffer
+  try {
+    const image = await txt.findOne({ _id: new ObjectId(id) }, { projection })
+    if (si) {
+      buf = image.si.buffer
+    } else {
+      buf = image.i.buffer
+    }
+    return new Response(buf, {
+      headers: {
+        'Content-Type': 'image/avif',
+        'Cache-Control': 'public, max-age=31536000, immutable',
+      },
+    })
+  } catch (e) {
+    return new Response(null, {
+      status: 404,
+    })
   }
-  return new Response(buf, {
-    headers: {
-      'Content-Type': 'image/avif',
-      'Cache-Control': 'public, max-age=31536000, immutable',
-    },
-  })
 }
