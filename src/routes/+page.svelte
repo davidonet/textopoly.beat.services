@@ -126,9 +126,13 @@
           <p>&nbsp;</p>
         {/if}
       {:else if zoom < 10}
-        <img src="img/{txt.id}.avif" alt={txt.id} width="100%" />
+        <img src="img/{txt.id}.avif" alt={txt.id} width="100%" height="100%" />
       {:else}
-        <img src="img/{txt.id}.avif?s=1" alt={txt.id} width="100%" />
+        <img
+          src="img/{txt.id}.avif?s=1"
+          alt={txt.id}
+          width="100%"
+          height="100%" />
       {/if}
     </div>
   {/each}
