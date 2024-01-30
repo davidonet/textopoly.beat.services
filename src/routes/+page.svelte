@@ -129,7 +129,7 @@
         <img src="img/{txt.id}.avif" alt={txt.id} width="100%" height="100%" />
       {:else}
         <img
-          src="img/{txt.id}.avif?s=1"
+          src="img/s/{txt.id}.avif"
           alt={txt.id}
           width="100%"
           height="100%" />
