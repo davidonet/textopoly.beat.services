@@ -1,7 +1,6 @@
 <script>
   import { page } from '$app/stores'
   import { goto } from '$app/navigation'
-  import { useLazyImage as lazyImage } from 'svelte-lazy-image'
   import '$lib/scss/zooms.scss'
   import { onMount } from 'svelte'
 
@@ -129,7 +128,7 @@
         <img src="img/{txt.id}.avif" alt={txt.id} width="100%" height="100%" />
       {:else}
         <img
-          src="img/{txt.id}.avif?s=1"
+          src="img/s/{txt.id}.avif"
           alt={txt.id}
           width="100%"
           height="100%" />
