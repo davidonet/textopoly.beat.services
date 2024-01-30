@@ -3,11 +3,12 @@
   import { goto } from '$app/navigation'
   import { onMount } from 'svelte'
   import '$lib/scss/zooms.scss'
+  import logo from '../assets/full_logo.svg'
 
   let isDragging = false
   let x = 0
   let y = 0
-  let zoom = 10
+  let zoom = 4
   let innerWidth = 0
   let innerHeight = 0
   let stepx = 0
@@ -79,9 +80,9 @@
 
   onMount(() => {
     page.subscribe((p) => {
-      const centerX = parseFloat(p.url.searchParams.get('x')) || 0
-      const centerY = parseFloat(p.url.searchParams.get('y')) || 0
-      zoom = parseInt($page.url.searchParams.get('z')) || 10
+      const centerX = parseFloat(p.url.searchParams.get('x')) || 8.11
+      const centerY = parseFloat(p.url.searchParams.get('y')) || 12.12
+      zoom = parseInt($page.url.searchParams.get('z')) || 4
       innerWidth = window.innerWidth
       innerHeight = window.innerHeight
       stepx = getStepX(zoom)
@@ -123,6 +124,10 @@
   }}
   on:mouseup={mouseup}
   on:wheel={wheelZoom} />
+
+<div class="header">
+  <p>TEXTOPOLY</p>
+</div>
 
 <div id="map" class="z{zoom}">
   {#each $page.data.txts as txt}
@@ -191,6 +196,14 @@
   </iframe>
 {/if}
 
+<img
+  src={logo}
+  alt="logo"
+  class="logo"
+  on:click={() => {
+    window.location = 'https://xn--b-bga.at/'
+  }} />
+
 <style>
   .msg {
     position: absolute;
@@ -219,5 +232,28 @@
     align-items: center;
     width: 100%;
     height: 100%;
+  }
+  .logo {
+    position: fixed;
+    bottom: 12px;
+    left: 16px;
+    z-index: 1000;
+    width: 128px;
+    pointer-events: click;
+    cursor: pointer;
+  }
+  .header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100%;
+    height: 32px;
+    background-color: rgba(206, 210, 202, 0.8);
+    font-size: 24px;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 </style>

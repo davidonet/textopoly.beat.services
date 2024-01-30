@@ -1,7 +1,8 @@
 import { MongoClient, GridFSBucket } from 'mongodb'
 import fs from 'fs'
 
-const uri = 'mongodb://localhost:27017'
+const uri =
+  'mongodb+srv://textopoly:vnl66g7a4vAGZ7XN@textopoly.aiz393w.mongodb.net/'
 const client = new MongoClient(uri)
 
 async function main() {
