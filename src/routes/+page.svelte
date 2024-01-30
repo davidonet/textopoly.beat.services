@@ -107,7 +107,11 @@
   function playSoundcloud(url) {
     soundcloud = url
     setTimeout(() => {
-      SC.Widget(soundcloudIframe).play()
+      const widget = SC.Widget(soundcloudIframe)
+      widget.play()
+      widget.bind(SC.Widget.Events.FINISH, () => {
+        soundcloud = ''
+      })
     }, 1000)
   }
 </script>
@@ -126,8 +130,11 @@
       {#if zoom < 20}
         <div
           class={`soundcloud ${getL(txt.t)} ${txt.s}`}
-          style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}>
+          style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}
+          on:click={playSoundcloud.bind(this, txt.t)}>
           <div>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
             <img
               src="img/soundcloud.svg"
               alt="soundcloud"
@@ -174,8 +181,8 @@
 {#if soundcloud.includes('soundcloud.com')}
   <iframe
     bind:this={soundcloudIframe}
-    width="25%"
-    height="100"
+    width="256px"
+    height="100px"
     scrolling="no"
     frameborder="no"
     allow="autoplay"
