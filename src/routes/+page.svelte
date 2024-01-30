@@ -1,7 +1,6 @@
 <script>
   import { page } from '$app/stores'
   import { goto } from '$app/navigation'
-  import { useLazyImage as lazyImage } from 'svelte-lazy-image'
   import '$lib/scss/zooms.scss'
   import { onMount } from 'svelte'
 
