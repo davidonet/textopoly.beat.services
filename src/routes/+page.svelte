@@ -1,8 +1,8 @@
 <script>
   import { page } from '$app/stores'
   import { goto } from '$app/navigation'
-  import '$lib/scss/zooms.scss'
   import { onMount } from 'svelte'
+  import '$lib/scss/zooms.scss'
 
   let isDragging = false
   let x = 0
@@ -12,6 +12,8 @@
   let innerHeight = 0
   let stepx = 0
   let stepy = 0
+  let soundcloud = ''
+  let soundcloudIframe
 
   const zooms = [1, 2, 4, 10, 20, 40]
 
@@ -101,6 +103,13 @@
       goto(`?z=${zooms[i - 1]}&x=${centerX}&y=${centerY}`)
     }
   }
+
+  function playSoundcloud(url) {
+    soundcloud = url
+    setTimeout(() => {
+      SC.Widget(soundcloudIframe).play()
+    }, 1000)
+  }
 </script>
 
 <svelte:window
@@ -118,19 +127,20 @@
         <div
           class={`soundcloud ${getL(txt.t)} ${txt.s}`}
           style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}>
-          <a
-            href={txt.t}
-            target="_blank"
-            rel="noopener noreferrer"
-            draggable="false">
-            <div>
-              <img
-                src="img/soundcloud.svg"
-                alt="soundcloud"
-                width="30%"
-                draggable="false" />
-            </div>
-          </a>
+          <div>
+            <img
+              src="img/soundcloud.svg"
+              alt="soundcloud"
+              width="30%"
+              draggable="false"
+              on:click={playSoundcloud.bind(this, txt.t)} />
+          </div>
+        </div>
+      {:else}
+        <div
+          class={`msg ${getL(txt.t)} ${txt.s}`}
+          style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}>
+          <p>&nbsp;</p>
         </div>
       {/if}
     {:else}
@@ -160,6 +170,19 @@
     {/if}
   {/each}
 </div>
+<!-- svelte-ignore a11y-missing-attribute -->
+{#if soundcloud.includes('soundcloud.com')}
+  <iframe
+    bind:this={soundcloudIframe}
+    width="25%"
+    height="100"
+    scrolling="no"
+    frameborder="no"
+    allow="autoplay"
+    src="https://w.soundcloud.com/player/?url={soundcloud}"
+    style="position:fixed;bottom:0;right:0;z-index:2000">
+  </iframe>
+{/if}
 
 <style>
   .msg {
@@ -179,10 +202,11 @@
   }
   .soundcloud {
     position: absolute;
-    pointer-events: click;
     z-index: 100;
+    pointer-events: click;
+    cursor: pointer;
   }
-  .soundcloud > a > div {
+  .soundcloud > div {
     display: flex;
     justify-content: center;
     align-items: center;
