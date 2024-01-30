@@ -13,7 +13,7 @@
   let stepx = 0
   let stepy = 0
 
-  const zooms = [1, 2, 4, 10, 20]
+  const zooms = [1, 2, 4, 10, 20, 40]
 
   function getL(t) {
     if (t === undefined) return 'l0'
@@ -70,15 +70,15 @@
 
   function mouseup(e) {
     isDragging = false
-    const centerX = Math.round(innerWidth / (2 * stepx) - x)
-    const centerY = Math.round(innerHeight / (2 * stepy) - y)
+    const centerX = (innerWidth / (2 * stepx) - x).toFixed(2)
+    const centerY = (innerHeight / (2 * stepy) - y).toFixed(2)
     goto(`?z=${zoom}&x=${centerX}&y=${centerY}`)
   }
 
   onMount(() => {
     page.subscribe((p) => {
-      const centerX = parseInt(p.url.searchParams.get('x')) || 0
-      const centerY = parseInt(p.url.searchParams.get('y')) || 0
+      const centerX = parseFloat(p.url.searchParams.get('x')) || 0
+      const centerY = parseFloat(p.url.searchParams.get('y')) || 0
       zoom = parseInt($page.url.searchParams.get('z')) || 10
       innerWidth = window.innerWidth
       innerHeight = window.innerHeight
@@ -93,8 +93,8 @@
     const delta = Math.sign(e.deltaY)
     const i = zooms.indexOf(zoom)
     if (i === -1) return
-    const centerX = Math.round(innerWidth / (2 * stepx) - x)
-    const centerY = Math.round(innerHeight / (2 * stepy) - y)
+    const centerX = (innerWidth / (2 * stepx) - x).toFixed(2)
+    const centerY = (innerHeight / (2 * stepy) - y).toFixed(2)
     if (delta > 0 && i < zooms.length - 1) {
       goto(`?z=${zooms[i + 1]}&x=${centerX}&y=${centerY}`)
     } else if (delta < 0 && i > 0) {
@@ -103,17 +103,16 @@
   }
 </script>
 
-<svelte:window on:mousemove={mousemove} on:touchmove={mousemove} />
-
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<div
-  id="map"
-  class="z{zoom}"
+<svelte:window
+  on:mousemove={mousemove}
   on:mousedown={(e) => {
     isDragging = true
   }}
   on:mouseup={mouseup}
-  on:wheel={wheelZoom}>
+  on:wheel={wheelZoom} />
+
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div id="map" class="z{zoom}">
   {#each $page.data.txts as txt}
     <div
       class={`msg ${getL(txt.t)} ${txt.s}`}
@@ -145,7 +144,6 @@
     pointer-events: none;
     z-index: -100;
   }
-
   #map {
     position: fixed;
     width: 100%;
