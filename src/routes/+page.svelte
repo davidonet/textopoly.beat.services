@@ -113,25 +113,51 @@
 
 <div id="map" class="z{zoom}">
   {#each $page.data.txts as txt}
-    <div
-      class={`msg ${getL(txt.t)} ${txt.s}`}
-      style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}>
-      {#if txt.t}
-        {#if zoom < 20}
-          <p>{txt.t}</p>
-        {:else}
-          <p>&nbsp;</p>
-        {/if}
-      {:else if zoom < 10}
-        <img src="img/{txt.id}.avif" alt={txt.id} width="100%" height="100%" />
-      {:else}
-        <img
-          src="img/s/{txt.id}.avif"
-          alt={txt.id}
-          width="100%"
-          height="100%" />
+    {#if txt.t && txt.t.includes('soundcloud.com')}
+      {#if zoom < 20}
+        <div
+          class={`soundcloud ${getL(txt.t)} ${txt.s}`}
+          style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}>
+          <a
+            href={txt.t}
+            target="_blank"
+            rel="noopener noreferrer"
+            draggable="false">
+            <div>
+              <img
+                src="img/soundcloud.svg"
+                alt="soundcloud"
+                width="30%"
+                draggable="false" />
+            </div>
+          </a>
+        </div>
       {/if}
-    </div>
+    {:else}
+      <div
+        class={`msg ${getL(txt.t)} ${txt.s}`}
+        style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}>
+        {#if txt.t}
+          {#if zoom < 20}
+            <p>{txt.t}</p>
+          {:else}
+            <p>&nbsp;</p>
+          {/if}
+        {:else if zoom < 10}
+          <img
+            src="img/{txt.id}.avif"
+            alt={txt.id}
+            width="100%"
+            height="100%" />
+        {:else}
+          <img
+            src="img/s/{txt.id}.avif"
+            alt={txt.id}
+            width="100%"
+            height="100%" />
+        {/if}
+      </div>
+    {/if}
   {/each}
 </div>
 
@@ -150,5 +176,17 @@
     overflow: hidden;
     z-index: 500;
     cursor: move;
+  }
+  .soundcloud {
+    position: absolute;
+    pointer-events: click;
+    z-index: 100;
+  }
+  .soundcloud > a > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
   }
 </style>
