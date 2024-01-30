@@ -111,12 +111,11 @@
   on:mouseup={mouseup}
   on:wheel={wheelZoom} />
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div id="map" class="z{zoom}">
   {#each $page.data.txts as txt}
     <div
       class={`msg ${getL(txt.t)} ${txt.s}`}
-      style={`left: ${(x + txt.p[0]) * stepx}px; top: ${(y + txt.p[1]) * stepy}px; background-color: ${txt.c};`}>
+      style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}>
       {#if txt.t}
         {#if zoom < 20}
           <p>{txt.t}</p>
