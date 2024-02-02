@@ -4,6 +4,7 @@
   import { onMount } from 'svelte'
   import '$lib/scss/zooms.scss'
   import logo from '../assets/full_logo.svg'
+  import map from '../assets/map.avif'
 
   let isDragging = false
   let x = 0
@@ -15,6 +16,7 @@
   let stepy = 0
   let soundcloud = ''
   let soundcloudIframe
+  let showMap = false
 
   const zooms = [1, 2, 4, 10, 20, 40]
 
@@ -96,8 +98,6 @@
     const delta = Math.sign(e.deltaY)
     const i = zooms.indexOf(zoom)
     if (i === -1) return
-    const centerX = (innerWidth / (2 * stepx) - x).toFixed(2)
-    const centerY = (innerHeight / (2 * stepy) - y).toFixed(2)
     if (delta > 0 && i < zooms.length - 1) {
       goto(`?z=${zooms[i + 1]}&x=${centerX}&y=${centerY}`)
     } else if (delta < 0 && i > 0) {
@@ -115,8 +115,22 @@
       })
     }, 1000)
   }
+
+  function mapClick(e) {
+    const rect = e.target.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / rect.width
+    const y = (e.clientY - rect.top) / rect.height
+    const newX = ((x - 0.15) / 0.58) * 2500
+    const newY = ((y - 0.5) / 0.4) * 584
+    showMap = false
+    goto(`?z=${zoom}&x=${newX}&y=${newY}`)
+  }
+
+  $: centerX = (innerWidth / (2 * stepx) - x).toFixed(2)
+  $: centerY = (innerHeight / (2 * stepy) - y).toFixed(2)
 </script>
 
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <svelte:window
   on:mousemove={mousemove}
   on:mousedown={(e) => {
@@ -125,14 +139,52 @@
   on:mouseup={mouseup}
   on:wheel={wheelZoom} />
 
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="header">
-  <p>TEXTOPOLY</p>
+  <div
+    class="textopoly"
+    on:click={() => {
+      showMap = !showMap
+    }}>
+    TEXTOPOLY
+  </div>
+  <div style="margin-left: auto; margin-right:32px">
+    <div style="display:flex;align-items: center;">
+      <button on:click={() => goto(`?z=1&x=${centerX}&y=${centerY}`)}>
+        x1
+      </button>
+      <button on:click={() => goto(`?z=2&x=${centerX}&y=${centerY}`)}>
+        x2
+      </button>
+      <button on:click={() => goto(`?z=4&x=${centerX}&y=${centerY}`)}>
+        x4
+      </button>
+      <button on:click={() => goto(`?z=10&x=${centerX}&y=${centerY}`)}>
+        x10
+      </button>
+      <button on:click={() => goto(`?z=20&x=${centerX}&y=${centerY}`)}>
+        x20
+      </button>
+      <button on:click={() => goto(`?z=40&x=${centerX}&y=${centerY}`)}>
+        x40
+      </button>
+    </div>
+  </div>
 </div>
+
+{#if showMap}
+  <div class="map" on:click={mapClick}>
+    <img src={map} alt="map" width="100%" />
+  </div>
+{/if}
 
 <div id="map" class="z{zoom}">
   {#each $page.data.txts as txt}
     {#if txt.t && txt.t.includes('soundcloud.com')}
       {#if zoom < 20}
+        <!-- svelte-ignore a11y-click-events-have-key-events -->
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
           class={`soundcloud ${getL(txt.t)} ${txt.s}`}
           style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}
@@ -196,6 +248,8 @@
   </iframe>
 {/if}
 
+<!-- svelte-ignore a11y-click-events-have-key-events -->
+<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <img
   src={logo}
   alt="logo"
@@ -249,11 +303,31 @@
     z-index: 1000;
     width: 100%;
     height: 32px;
-    background-color: rgba(206, 210, 202, 0.8);
+    background-color: rgb(95, 100, 90);
     font-size: 24px;
     font-weight: bold;
     display: flex;
-    justify-content: center;
     align-items: center;
+    padding-left: 16px;
+    color: rgba(206, 210, 202, 1);
+  }
+  .header button {
+    border: none;
+    font-size: 12px;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 6px;
+    margin-left: 8px;
+  }
+  .map {
+    position: fixed;
+    top: 32px;
+    width: 100%;
+    z-index: 1000;
+    background-color: rgba(206, 210, 202, 1);
+    cursor: crosshair;
+  }
+  .textopoly {
+    cursor: pointer;
   }
 </style>
