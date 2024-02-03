@@ -3,6 +3,7 @@
   import { goto } from '$app/navigation'
   import { onMount } from 'svelte'
   import '$lib/scss/zooms.scss'
+  import { getStepX, getStepY, getL } from './utils.js'
   import logo from '../assets/full_logo.svg'
   import map from '../assets/map.avif'
 
@@ -19,53 +20,54 @@
   let showMap = false
   let touchX = 0
   let touchY = 0
+  let canZoom = false
+  let newZoom = 4
 
   const zooms = [1, 2, 4, 10, 20, 40]
 
-  function getL(t) {
-    if (t === undefined) return 'l0'
-    const l = t.length
-    if (l < 1) return 'l0'
-    if (l < 4) return 'l4'
-    if (l < 15) return 'l15'
-    if (l < 50) return 'l50'
-    if (l < 150) return 'l150'
-    if (l < 300) return 'l300'
-    return 'l600'
+  function touchstart(e) {
+    touchX = e.touches[0].clientX
+    touchY = e.touches[0].clientY
+    canZoom = true
   }
 
-  function getStepX(z) {
-    switch (z) {
-      case 1:
-        return 240
-      case 2:
-        return 120
-      case 4:
-        return 60
-      case 10:
-        return 24
-      case 20:
-        return 12
-      case 40:
-        return 6
+  function touchmove(e) {
+    if (e.touches.length == 1) {
+      x += (e.touches[0].clientX - touchX) / stepx
+      y += (e.touches[0].clientY - touchY) / stepy
+      touchX = e.touches[0].clientX
+      touchY = e.touches[0].clientY
+      return false
+    }
+    if (e.touches.length == 2) {
+      const touch1 = e.touches[0]
+      const touch2 = e.touches[1]
+      const x1 = touch1.clientX
+      const y1 = touch1.clientY
+      const x2 = touch2.clientX
+      const y2 = touch2.clientY
+      const distance = (x2 - x1 + (y2 - y1)) / 2
+      if (canZoom && 50 < Math.abs(distance)) {
+        const i = zooms.indexOf(zoom)
+        if (i === -1) return
+        canZoom = false
+        if (0 < distance && i < zooms.length - 1) {
+          newZoom = zooms[i + 1]
+        } else if (distance < 0 && i > 0) {
+          newZoom = zooms[i - 1]
+        }
+      }
     }
   }
 
-  function getStepY(z) {
-    switch (z) {
-      case 1:
-        return 160
-      case 2:
-        return 80
-      case 4:
-        return 40
-      case 10:
-        return 16
-      case 20:
-        return 8
-      case 40:
-        return 4
-    }
+  function touchend(e) {
+    const centerX = (innerWidth / (2 * stepx) - x).toFixed(2)
+    const centerY = (innerHeight / (2 * stepy) - y).toFixed(2)
+    goto(`?z=${newZoom}&x=${centerX}&y=${centerY}`)
+  }
+
+  function mousedown(e) {
+    isDragging = true
   }
 
   function mousemove(e) {
@@ -73,19 +75,6 @@
       x += e.movementX / stepx
       y += e.movementY / stepy
     }
-  }
-
-  function touchstart(e) {
-    touchX = e.touches[0].clientX
-    touchY = e.touches[0].clientY
-  }
-
-  function touchmove(e) {
-    x += (e.touches[0].clientX - touchX) / stepx
-    y += (e.touches[0].clientY - touchY) / stepy
-    touchX = e.touches[0].clientX
-    touchY = e.touches[0].clientY
-    return false
   }
 
   function mouseup(e) {
@@ -147,14 +136,12 @@
 
 <svelte:window
   on:mousemove={mousemove}
-  on:mousedown={(e) => {
-    isDragging = true
-  }}
+  on:mousedown={mousedown}
   on:mouseup={mouseup}
   on:wheel={wheelZoom}
   on:touchstart={touchstart}
   on:touchmove={touchmove}
-  on:touchend={mouseup} />
+  on:touchend={touchend} />
 
 <div class="header">
   <div
@@ -167,22 +154,22 @@
   <div style="margin-left: auto; margin-right:32px">
     <div style="display:flex;align-items: center;">
       <button on:click={() => goto(`?z=1&x=${centerX}&y=${centerY}`)}>
-        x1
+        z1
       </button>
       <button on:click={() => goto(`?z=2&x=${centerX}&y=${centerY}`)}>
-        x2
+        z2
       </button>
       <button on:click={() => goto(`?z=4&x=${centerX}&y=${centerY}`)}>
-        x4
+        z4
       </button>
       <button on:click={() => goto(`?z=10&x=${centerX}&y=${centerY}`)}>
-        x10
+        z10
       </button>
       <button on:click={() => goto(`?z=20&x=${centerX}&y=${centerY}`)}>
-        x20
+        z20
       </button>
       <button on:click={() => goto(`?z=40&x=${centerX}&y=${centerY}`)}>
-        x40
+        z40
       </button>
     </div>
   </div>
