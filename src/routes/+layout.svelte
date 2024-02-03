@@ -9,5 +9,9 @@
     padding: 0;
     background-color: rgb(122, 122, 113);
     font-family: 'Futura Condensed PT', sans-serif;
+    overscroll-behavior: none;
+  }
+  :global(html) {
+    overscroll-behavior: none;
   }
 </style>
