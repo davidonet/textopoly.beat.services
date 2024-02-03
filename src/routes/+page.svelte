@@ -20,8 +20,6 @@
   let showMap = false
   let touchX = 0
   let touchY = 0
-  let canZoom = false
-  let newZoom = 4
 
   const zooms = [1, 2, 4, 10, 20, 40]
 
@@ -39,31 +37,6 @@
       touchY = e.touches[0].clientY
       return false
     }
-    if (e.touches.length == 2) {
-      const touch1 = e.touches[0]
-      const touch2 = e.touches[1]
-      const x1 = touch1.clientX
-      const y1 = touch1.clientY
-      const x2 = touch2.clientX
-      const y2 = touch2.clientY
-      const distance = (x2 - x1 + (y2 - y1)) / 2
-      if (canZoom && 50 < Math.abs(distance)) {
-        const i = zooms.indexOf(zoom)
-        if (i === -1) return
-        canZoom = false
-        if (0 < distance && i < zooms.length - 1) {
-          newZoom = zooms[i + 1]
-        } else if (distance < 0 && i > 0) {
-          newZoom = zooms[i - 1]
-        }
-      }
-    }
-  }
-
-  function touchend(e) {
-    const centerX = (innerWidth / (2 * stepx) - x).toFixed(2)
-    const centerY = (innerHeight / (2 * stepy) - y).toFixed(2)
-    goto(`?z=${newZoom}&x=${centerX}&y=${centerY}`)
   }
 
   function mousedown(e) {
@@ -141,7 +114,7 @@
   on:wheel={wheelZoom}
   on:touchstart={touchstart}
   on:touchmove={touchmove}
-  on:touchend={touchend} />
+  on:touchend={mouseup} />
 
 <div class="header">
   <div
