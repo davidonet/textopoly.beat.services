@@ -17,6 +17,8 @@
   let soundcloud = ''
   let soundcloudIframe
   let showMap = false
+  let touchX = 0
+  let touchY = 0
 
   const zooms = [1, 2, 4, 10, 20, 40]
 
@@ -71,6 +73,19 @@
       x += e.movementX / stepx
       y += e.movementY / stepy
     }
+  }
+
+  function touchstart(e) {
+    touchX = e.touches[0].clientX
+    touchY = e.touches[0].clientY
+  }
+
+  function touchmove(e) {
+    x += (e.touches[0].clientX - touchX) / stepx
+    y += (e.touches[0].clientY - touchY) / stepy
+    touchX = e.touches[0].clientX
+    touchY = e.touches[0].clientY
+    return false
   }
 
   function mouseup(e) {
@@ -130,17 +145,17 @@
   $: centerY = (innerHeight / (2 * stepy) - y).toFixed(2)
 </script>
 
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <svelte:window
   on:mousemove={mousemove}
   on:mousedown={(e) => {
     isDragging = true
   }}
   on:mouseup={mouseup}
-  on:wheel={wheelZoom} />
+  on:wheel={wheelZoom}
+  on:touchstart={touchstart}
+  on:touchmove={touchmove}
+  on:touchend={mouseup} />
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
-<!-- svelte-ignore a11y-click-events-have-key-events -->
 <div class="header">
   <div
     class="textopoly"
@@ -183,14 +198,11 @@
   {#each $page.data.txts as txt}
     {#if txt.t && txt.t.includes('soundcloud.com')}
       {#if zoom < 20}
-        <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div
           class={`soundcloud ${getL(txt.t)} ${txt.s}`}
           style={`left: ${Math.round((x + txt.p[0]) * stepx)}px;top: ${Math.round((y + txt.p[1]) * stepy)}px;background-color: ${txt.c};`}
           on:click={playSoundcloud.bind(this, txt.t)}>
           <div>
-            <!-- svelte-ignore a11y-click-events-have-key-events -->
             <!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
             <img
               src="img/soundcloud.svg"
@@ -248,8 +260,6 @@
   </iframe>
 {/if}
 
-<!-- svelte-ignore a11y-click-events-have-key-events -->
-<!-- svelte-ignore a11y-no-noninteractive-element-interactions -->
 <img
   src={logo}
   alt="logo"
